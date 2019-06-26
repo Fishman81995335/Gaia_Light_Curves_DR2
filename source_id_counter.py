@@ -13,7 +13,6 @@ import os
 fileName = str(input('enter text file name: ')) + '.txt'
 lineList = [line.rstrip('\n') for line in open(fileName)]
 dir = os.path.dirname(os.path.abspath(__file__))
-print(lineList)
 num = 0
 source_id = 0
 
@@ -31,7 +30,7 @@ for link in range(len(lineList)):
     with open(newfile,'r') as alerts:
       reader = csv.reader(alerts)
       for line in reader:
-        if not(line[0] == source_id):
+        if not(line[0] == source_id) and (not(line[0] == "source_id")):
           num = num+1
           source_id = line[0]
 
