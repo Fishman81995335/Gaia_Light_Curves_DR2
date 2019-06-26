@@ -5,9 +5,10 @@ import gzip
 import shutil
 #
 #
-# takes in string as name of new file
-# unzips and returns csv file with new name that has the data from the gaia 
-# data light curve file in same directory as python file
+# Takes in string as name of new file.
+# Unzips and returns csv file with new name that has the data from the first 
+# gaia data light curve file.
+# Data is stored in a csv file in the same directory as python file.
 #
 
 newfile = str(input('enter new file name: '))
