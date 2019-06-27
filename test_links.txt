@@ -1,1 +1,4 @@
 http://cdn.gea.esac.esa.int/Gaia/gdr2/light_curves/csv/light_curves_1042504286338226688_1098703830327377408.csv.gz
+http://cdn.gea.esac.esa.int/Gaia/gdr2/light_curves/csv/light_curves_1098746200181562496_1150788044027782912.csv.gz
+http://cdn.gea.esac.esa.int/Gaia/gdr2/light_curves/csv/light_curves_1150901877842361600_1210969125779607680.csv.gz
+http://cdn.gea.esac.esa.int/Gaia/gdr2/light_curves/csv/light_curves_1211096291174493056_1265569498825687296.csv.gz

@@ -15,16 +15,22 @@ import shutil
 
 fileName = str(input('enter text file name: ')) + '.txt'
 url = [line.rstrip('\n') for line in open(fileName)]
-print(url)
 
-newfolder = str(input('enter new folder name: '))
-dir = os.path.dirname(os.path.abspath(__file__)) + '/' + newfolder
-os.mkdir(dir)
+dir = str(input('enter folder path: '))
 
+print("Calculating total number of files...")
+num_files = len(url)
+if num_files == 1:
+    print("There is 1 file")
+else:
+    message = "There are " + str(num_files) + " files"
+    print(message)
 
 for x in range(len(url)):
+    message = "downloading file number " + \
+        str(x+1) + " out of " + str(num_files)
+    print(message)
     newfile = dir + '/' + str(x) + '.csv'
-    print(newfile)
     newfilegz = newfile + '.gz'
 
     urllib.request.urlretrieve(url[x], newfilegz)
@@ -32,3 +38,4 @@ for x in range(len(url)):
         with open(newfile, 'wb') as f_out:
             shutil.copyfileobj(f_in, f_out)
     os.remove(newfilegz)
+print('\nsuccess!\n')
