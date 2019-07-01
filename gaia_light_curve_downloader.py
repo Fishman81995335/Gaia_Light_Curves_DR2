@@ -6,9 +6,10 @@ import shutil
 #
 #
 # Takes in 2 strings on prompt
-# First string is name of text file in which links of urls are stored
-# Second string is name of new folder in which files will be stored
-# Contents of folder will be deleted
+# First string is name of text file (without '.txt') in which links of urls
+# are stored. Text file provided in repository is 'file_links.txt'
+# Second string is path of new folder in which files will be stored
+# WARNING: Contents of folder will be deleted
 # Unzips and returns csv files in 2 folder, src and var.
 # Folder will be created in the directory of the location of the python code
 # Files inside folder will be named 0 to x for the x files in gaia database

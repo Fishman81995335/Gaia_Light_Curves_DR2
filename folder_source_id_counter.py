@@ -7,17 +7,19 @@ import os
 import sys
 #
 #
-# Takes in name of the links text file as a string without ".txt"
-# Prints out number of separate sources in the different files
-# Requires that source_id is a non zero integer and that source_id's are inputed
-# in ascending order
+# Takes in path to directory with all files in which source_id's need to be 
+# counted
+# Prints out number of separate sources in all the files in the folder
+# Requires that source_id is a non zero integers, unique to each source
+# Requires all files are formatted in correct native format from Gaia database
 #
 dir = str(input('enter path to folder: '))
 num = 0
 source_id = 0
 num_files = 0
 
-choice = str(input('type "var" for variability data and "src" for source data: '))
+choice = \
+    str(input('type "var" for variability data and "src" for source data: '))
 if choice == 'src':
     n = 0
 elif choice == 'var':

@@ -5,11 +5,12 @@ import gzip
 import shutil
 #
 #
+# This file is meant as a test
 # Takes in string as name of new folder in which files will be stored.
 # Unzips and returns csv files in folder with the name entered.
 # Folder will be created in the directory of the location of the python code
 # Files inside folder will be named 0 to x for the x files in gaia database
-# 
+#
 #
 
 newfolder = str(input('enter new folder name: '))

@@ -5,6 +5,8 @@ import os
 #
 # Takes in name of csv file as a string without ".csv"
 # Prints out number of separate sources in the csv
+# Requires that source_id is a non zero integer and each source has a unique
+# source id
 #
 #
 

@@ -8,8 +8,8 @@ import os
 #
 # Takes in name of the links text file as a string without ".txt"
 # Prints out number of separate sources in the different files
-# Requires that source_id is a non zero integer and that source_id's are inputed
-# in ascending order
+# Requires that source_id is a non zero integer and each source has a unique
+# source id
 #
 fileName = str(input('enter text file name: ')) + '.txt'
 lineList = [line.rstrip('\n') for line in open(fileName)]
