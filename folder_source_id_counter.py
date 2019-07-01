@@ -3,7 +3,8 @@ import csv
 import urllib.request
 import shutil
 import gzip
-import os, sys
+import os
+import sys
 #
 #
 # Takes in name of the links text file as a string without ".txt"
@@ -16,10 +17,15 @@ num = 0
 source_id = 0
 num_files = 0
 
+choice = str(input('type "var" for variability data and "src" for source data: '))
+if choice == 'src':
+    n = 0
+elif choice == 'var':
+    n = 1
+
 print("Calculating total number of files...")
 for fileName in os.listdir(dir):
     num_files = num_files+1
-    print(fileName)
 message = "There are " + str(num_files) + " files"
 print(message)
 
@@ -37,9 +43,9 @@ for fileName in os.listdir(dir):
         reader = csv.reader(curve)
         lineNum = 0
         for line in reader:
-            if not(line[0] == source_id) and not(lineNum == 0):
+            if not(line[n] == source_id) and not(lineNum == 0):
                 num = num+1
-                source_id = line[0]
+                source_id = line[n]
             if (lineNum == 0):
                 lineNum = lineNum + 1
 
