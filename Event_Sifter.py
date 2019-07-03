@@ -38,9 +38,10 @@ for fileName in os.listdir(dir):
 message = "There are " + str(num_files) + " files\n"
 print(message)
 
-# Iterate over rows to find number of source IDs
+# Initialize Source ID
 source_id = 0
 
+# Create new directories for new files
 folder = new_dir+'/sifter_results'
 
 try:
@@ -54,6 +55,7 @@ os.mkdir(new_dir+'/sifter_results'+'/BP_results')
 os.mkdir(new_dir+'/sifter_results'+'/RP_results')
 
 
+# Creates new files for each gaia database file and enters results
 for fileName in os.listdir(dir):
     print('processing file '+fileName + ' \U0001f44d')
     # Get file from folder
@@ -69,7 +71,8 @@ for fileName in os.listdir(dir):
         RP_lin_array = []
         BP_lin_array = []
         while True:
-            # Case: Next line is same source and is RP
+            # Case: Next line has same source and is of RP or BP Band
+            # Events are added to RP and BP arrays that will later be recorded
             if (line[0] == source_id) and \
                     not(lineSkip == 0):
                 if (str(line[2]) == 'RP'):
@@ -88,8 +91,10 @@ for fileName in os.listdir(dir):
                     to_add.append(line[5])
                     to_add.append(line[6])
                     BP_lin_array.append(to_add)
+            # Case: Header line (we want to ignore this)
             elif (lineSkip == 0):
                 lineSkip = lineSkip + 1
+            # Case: New Source_ID is found so arrays are recorded
             elif (line[0] != source_id) and (RP_lin_array != []) and \
                     (BP_lin_array != []):
                 source_id = line[0]
@@ -97,6 +102,8 @@ for fileName in os.listdir(dir):
                 RP_lin_array = []
                 BP_array.append(BP_lin_array)
                 BP_lin_array = []
+            # First line case when no RP is recorded but source_ID 
+            # is also different
             elif line[0] != source_id:
                 source_id = line[0]
             try:
@@ -109,29 +116,28 @@ for fileName in os.listdir(dir):
     assert(len(BP_array) == len(RP_array))
 
     # filter through both arrays
-
-    # test by writing BP and RP arrays
-    with open(new_dir+'/sifter_results'+'/BP_results'+'/BP_results_' + fileName + '.csv', 'w') as BP_file:
+    # Open files for BP and RP Results
+    # These files will then be read to filter through for the final results file
+    with open(new_dir+'/sifter_results'+'/BP_results'+'/BP_results_' + fileName, 'w') as BP_file:
         BP_writer = csv.writer(BP_file)
         for n in range(len(BP_array)):
             for m in range(len(BP_array[n])):
                 BP_writer.writerow(BP_array[n][m])
 
-    with open(new_dir+'/sifter_results'+'/RP_results'+'/RP_results_' + fileName + '.csv', 'w') as RP_file:
+    with open(new_dir+'/sifter_results'+'/RP_results'+'/RP_results_' + fileName, 'w') as RP_file:
         RP_writer = csv.writer(RP_file)
         for n in range(len(RP_array)):
             for m in range(len(RP_array[n])):
                 RP_writer.writerow(RP_array[n][m])
 
-    # open writer
-    with open((new_dir+'/sifter_results'+'/results'+'/results_' + fileName + '.csv'), 'w') as to_write:
+    # open writer for results file
+    with open((new_dir+'/sifter_results'+'/results'+'/results_' + fileName), 'w') as to_write:
         # write headers
         writer = csv.writer(to_write)
         writer.writerow(['source_id', 'time', 'mag_BP_RP',
-                         'flux_BP_RP', 'agg_flux_error'])
+                         'flux_BP/RP', 'BP_flux_error', 'RP_flux_error', 'agg_flux_error', 'flux_BP/RP_lower', 'flux_BP/RP_upper'])
 
         # Sift through and remove points that don't have counterparts
-        newArray = []
         BP_s_counter = 0
         RP_s_counter = 0
         BP_v_counter = 0
@@ -139,10 +145,15 @@ for fileName in os.listdir(dir):
         while (BP_s_counter < len(BP_array) and RP_s_counter < len(RP_array)):
             while (BP_v_counter < len(BP_array[BP_s_counter])) and \
                     (RP_v_counter < len(RP_array[RP_s_counter])):
+                # Cases: RP and BP times of event don't match within .02
+                # Increment lower of two and keep comparing
                 if float(RP_array[RP_s_counter][RP_v_counter][1]) - float(BP_array[BP_s_counter][BP_v_counter][1]) > .02:
                     BP_v_counter = BP_v_counter + 1
                 elif float(RP_array[RP_s_counter][RP_v_counter][1]) - float(BP_array[BP_s_counter][BP_v_counter][1]) < -.02:
                     RP_v_counter = RP_v_counter + 1
+                # Times of RP and BP events match within .02. Record Event in 
+                # results file.
+                # See header above for entries
                 else:
                     newEntry = []
                     newEntry.append(RP_array[RP_s_counter][RP_v_counter][0])
@@ -151,10 +162,16 @@ for fileName in os.listdir(dir):
                     newEntry.append(
                         (float(BP_array[BP_s_counter][BP_v_counter][2]))-(float(RP_array[RP_s_counter][RP_v_counter][2])))
                     newEntry.append(
-                        (float(BP_array[BP_s_counter][BP_v_counter][3]))-(float(RP_array[RP_s_counter][RP_v_counter][3])))
+                        (float(BP_array[BP_s_counter][BP_v_counter][3]))/(float(RP_array[RP_s_counter][RP_v_counter][3])))
+                    newEntry.append(BP_array[BP_s_counter][BP_v_counter][4])
+                    newEntry.append(RP_array[RP_s_counter][RP_v_counter][4])
                     newEntry.append(numpy.sqrt(
                         (float(RP_array[RP_s_counter][RP_v_counter][4])**2) + (float(BP_array[BP_s_counter][BP_v_counter][4])**2)))
-                    newArray.append(newEntry)
+                    newEntry.append((float(BP_array[BP_s_counter][BP_v_counter][3]) - float(BP_array[BP_s_counter][BP_v_counter][4]))
+                                    / (float(RP_array[RP_s_counter][RP_v_counter][3]) + float(RP_array[RP_s_counter][RP_v_counter][4])))
+                    newEntry.append((float(BP_array[BP_s_counter][BP_v_counter][3]) + float(BP_array[BP_s_counter][BP_v_counter][4]))
+                                    / (float(RP_array[RP_s_counter][RP_v_counter][3]) - float(RP_array[RP_s_counter][RP_v_counter][4])))
+                    
                     writer.writerow(newEntry)
                     RP_v_counter = RP_v_counter + 1
                     BP_v_counter = BP_v_counter + 1
