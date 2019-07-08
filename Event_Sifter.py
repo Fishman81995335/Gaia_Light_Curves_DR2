@@ -1,6 +1,5 @@
 import io
 import csv
-import urllib.request
 import shutil
 import os
 import sys
@@ -26,12 +25,12 @@ import numpy
 #
 
 # Calculate Files
-dir = str(input('\nEnter path to source folder: '))
+dir1 = str(input('\nEnter path to source folder: '))
 new_dir = str(input('\nEnter path to folder where you want results: '))
 code_dir = os.path.dirname(os.path.realpath(__file__))
 num_files = 0
 print("\nCalculating total number of files...")
-for fileName in os.listdir(dir):
+for fileName in os.listdir(dir1):
     num_files = num_files+1
 
 
@@ -56,10 +55,10 @@ os.mkdir(new_dir+'/sifter_results'+'/RP_results')
 
 
 # Creates new files for each gaia database file and enters results
-for fileName in os.listdir(dir):
+for fileName in os.listdir(dir1):
     print('processing file '+fileName + ' \U0001f44d')
     # Get file from folder
-    newFileName = dir + "/" + fileName
+    newFileName = dir1 + "/" + fileName
     # Filter through individual file
 
     with open(newFileName, 'r') as curve2:

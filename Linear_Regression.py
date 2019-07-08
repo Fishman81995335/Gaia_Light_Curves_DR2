@@ -1,13 +1,7 @@
-import io
 import csv
-import urllib.request
 import shutil
 import os
-import sys
 import numpy
-import statsmodels.formula.api as sm
-import pandas as pd
-import scipy
 #
 #
 # Takes directory in which results csv files are located
@@ -39,8 +33,7 @@ except:
 
 os.mkdir(new_dir)
 
-# use regular fit to compare with current algorithm
-ols_fit = sm.ols
+
 
 # returns [[slope, intercept]] of linear regression on a list of lists [array_list]
 # Requires: list[n][1] is independent var and list[n][3] is dependent variable
@@ -71,7 +64,7 @@ def lin_reg_a_b(array_list):
 
 
 # Calculates weight and returns it for a given line
-def wc(l): return (2/(float(l[8])-float(l[7])))**2
+def wc(l): return (2/(float(l[8])-float(l[7])))
 
 
 # Creates new files for each results file
@@ -105,7 +98,7 @@ for fileName in os.listdir(dir):
                 elif (line[0] != source_id) and (x != []) and (y != []):
                     to_add = [source_id, numpy.polyfit(
                         x, y, 1, w=weight)[0], numpy.polyfit(x, y, 1, w=weight)[1]
-                        ,numpy.corrcoef(x,y)]
+                        ,numpy.corrcoef(x,y)[0,1]**2]
                     source_id = line[0]
                     writer.writerow(to_add)
                     x = [float(line[1])]
@@ -121,7 +114,7 @@ for fileName in os.listdir(dir):
                 except:
                     to_add = [source_id, numpy.polyfit(
                         x, y, 1, w=weight)[0], numpy.polyfit(x, y, 1, w=weight)[1],
-                        numpy.corrcoef(x,y)]
+                        (numpy.corrcoef(x,y)[0,1]**2)]
                     writer.writerow(to_add)
                     break
 
