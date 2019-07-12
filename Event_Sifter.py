@@ -23,6 +23,7 @@ import numpy
 # Requires: each source Id has at least one G band event
 #
 #
+#
 
 # Calculate Files
 dir1 = str(input('\nEnter path to source folder: '))
@@ -93,6 +94,8 @@ for fileName in os.listdir(dir1):
             # Case: Header line (we want to ignore this)
             elif (lineSkip == 0):
                 lineSkip = lineSkip + 1
+                RP_lin_array = []
+                BP_lin_array = []
             # Case: New Source_ID is found so arrays are recorded
             elif (line[0] != source_id) and (RP_lin_array != []) and \
                     (BP_lin_array != []):
@@ -103,13 +106,18 @@ for fileName in os.listdir(dir1):
                 BP_lin_array = []
             # First line case when no RP is recorded but source_ID 
             # is also different
+            # Also if BP or RP arrays are individually empty
             elif line[0] != source_id:
                 source_id = line[0]
+                BP_lin_array = []
+                RP_lin_array = []
             try:
                 line = next(reader)
             except:
                 RP_array.append(RP_lin_array)
                 BP_array.append(BP_lin_array)
+                RP_lin_array = []
+                BP_lin_array = []
                 break
 
     assert(len(BP_array) == len(RP_array))
