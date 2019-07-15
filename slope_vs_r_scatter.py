@@ -13,6 +13,8 @@ import matplotlib.patches as mpatches
 # Takes in cut off parameters
 # creates graphs for each light curve file and an aggregate master file
 # For all light curves
+# Creates a file 'skips.txt' that mentions which source ID's encountered an
+# error if any
 #
 # TESTING ONLY
 # '/Volumes/Untitled/Research/testing/slope_r_plot_testing/lin_reg'
@@ -29,9 +31,10 @@ dir3 = '/Volumes/Untitled/Research/light_curve_csv/src'
 #'/Volumes/Untitled/Research/light_curve_csv/src'
 print('\U0001f44d')
 
-new_dir = '/Volumes/Untitled/Research/slope_vs_r_plot'
+new_dir = '/Volumes/Untitled/Research/slope_vs_r_plot/slope_vs_r_plot'
 #str(input('\nEnter path to folder where you want scatter plot: '))
 #'/Volumes/Untitled/Research/slope_vs_r_plot'
+#'/Volumes/Untitled/Research/slope_vs_r_plot/slope_vs_r_plot'
 print('\U0001f44d')
 
 # input cutoffs
@@ -40,11 +43,11 @@ slope = .0025
 #float(input('bp/rp slope cutoff: '))
 r_s_min = 0
 #float(input('middle r squared value: '))
-flux_dev_1 = .3
+flux_dev_1 = .1
 #float(input('best flux ratio: '))
-flux_dev_2 = .4
+flux_dev_2 = .2
 #float(input('good flux ratio: '))
-flux_dev_3 = .5
+flux_dev_3 = .3
 #float(input('ok flux ratio: '))
 min_count = 5
 #float(input('minumum number of events: '))
@@ -76,9 +79,9 @@ lin_file = directory + '/results_'
 
 
 #create labels for graph:
-red = 'RP_max/RP_min and BP_max/BP_min within ' + str(flux_dev_1) + ' of 2.'
+red = 'RP_max/RP_min and BP_max/BP_min within ' + str(flux_dev_3) + ' of 2.'
 blue = 'RP_max/RP_min and BP_max/BP_min within ' + str(flux_dev_2) + ' of 2.'
-green = 'RP_max/RP_min and BP_max/BP_min within ' + str(flux_dev_3) + ' of 2.'
+green = 'RP_max/RP_min and BP_max/BP_min within ' + str(flux_dev_1) + ' of 2.'
 red_patch = mpatches.Patch(color='red', label=red)
 blue_patch = mpatches.Patch(color='blue', label=blue)
 green_patch = mpatches.Patch(color='green', label=green)

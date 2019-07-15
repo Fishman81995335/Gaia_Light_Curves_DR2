@@ -5,6 +5,7 @@ import os
 import numpy
 import matplotlib.pyplot as plt
 plt.style.use('seaborn-whitegrid')
+import matplotlib.patches as mpatches
 #
 #
 # Takes string of directory in which results csv files are located for lin reg,
@@ -43,18 +44,17 @@ dir3 = '/Volumes/Untitled/Research/light_curve_csv/src'
 #'/Volumes/Untitled/Research/light_curve_csv/src'
 print('\U0001f44d')
 
-new_dir = '/Volumes/Untitled/Research/Achrom_Squared_flux_dif'
-#str(input('\nEnter path to folder where you want achromatic sifter files: '))
+new_dir = str(input('\nEnter path to folder where you want achromatic sifter files: '))
 #'/Volumes/Untitled/Research/testing/Achrom_testing'
-#'/Volumes/Untitled/Research/Achrom_Sifter_squared'
-#'/Volumes/Untitled/Research/Achrom_Squared_flux_dif'
+#'/Volumes/Untitled/Research/Achromatic/Achrom_Sifter_squared'
+#'/Volumes/Untitled/Research/Achromatic/Achrom_Squared_flux_dif'
 print('\U0001f44d')
 
 # input cutoffs
 print('\nEnter cutoffs\n')
-slope = .1
+slope = .001
 #float(input('bp/rp slope cutoff: '))
-r_s_min = .8
+r_s_min = .7
 #float(input('mininum r squared value: '))
 flux_min = 1.8
 #float(input('minimum flux ratio: '))
@@ -88,6 +88,11 @@ os.mkdir(new_dir4)
 print('ligth curve folder created')
 
 
+#create labels for graph:
+red = 'RP band light curve'
+blue = 'BP band light curve'
+red_patch = mpatches.Patch(color='red', label=red)
+blue_patch = mpatches.Patch(color='blue', label=blue)
 
 
 # Create one new files for all results
@@ -154,7 +159,8 @@ with open(newFileName, 'w') as achrom_result:
                                         break
                                 
                                 if (max(bp_val) > flux_min*min(bp_val)) and (max(bp_val) < flux_max*min(bp_val)) \
-                                    and (max(rp_val) > flux_min*min(rp_val)) and (max(rp_val) < flux_max*min(rp_val)):
+                                    and (max(rp_val) > flux_min*min(rp_val)) and (max(rp_val) < flux_max*min(rp_val)) \
+                                        and (abs((max(rp_val)/max(bp_val))-(min(rp_val)/min(bp_val))) <= .1):
 
                                     # get next line while line is not of source_id
                                     while line2[0] != line[0]:
@@ -194,6 +200,10 @@ with open(newFileName, 'w') as achrom_result:
                                         fig2 = plt.figure()
                                         plt.errorbar(x=bp_t, y=bp_val, yerr=bp_err, fmt='b-o', capsize=3)
                                         plt.errorbar(x=rp_t, y=rp_val, yerr=rp_err, fmt='r-o', capsize=3)
+                                        plt.legend(handles=[red_patch,blue_patch])
+                                        plt.title(str(line[0]))
+                                        plt.ylabel('flux')
+                                        plt.xlabel('time')
                                         plt.savefig(new_dir4+'/'+'time_series_'+str(line[0])+'.png', dpi = 300)
                                         plt.close(fig2)
                                         writer.writerow(line)

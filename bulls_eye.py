@@ -27,8 +27,10 @@ ratio_tol = .4
 # str(input('\nInput the tolerance on max/min flux ratio from 2: '))
 tol_up = 2+.4
 tol_down = 2-.4
+num_events = 5
+# int(input('\nInput min number of bp rp events per source id'))
 n = 15
-
+# int(input('\nInput how many top values you'd like in text file))
 
 x = []
 y = []
@@ -46,7 +48,8 @@ for filename in os.listdir(lin_reg_dir):
       if line[0] != 'source_id':
         if abs(float(line[1]))< slope_cut and float(line[3]) > r_cut and \
           float(line[4]) < tol_up and float(line[4]) > tol_down and \
-            float(line[5]) < tol_up and float(line[5]) > tol_down:
+            float(line[5]) < tol_up and float(line[5]) > tol_down and \
+              num_events <= int(line[6]):
             source = source + [str(line[0])]
             x = x + [float(line[1])]
             y = y + [1 - float(line[3])]
