@@ -2,6 +2,7 @@ import os
 import csv
 import shutil
 import matplotlib.pyplot as plt
+import numpy
 
 #
 # Takes in text file with source ID's
@@ -96,8 +97,13 @@ for line in main:
         rp_val = rp_val + [float(event[5])]
         rp_err = rp_err + [float(event[6])]
   csvf.close()
+  bp_rat = max(bp_val)/min(bp_val)
+  rp_rat = max(rp_val)/min(rp_val)
+
+  legend_text = 'bp ratio: ' +str(bp_rat) + '\n' + 'rp ratio: ' + str(rp_rat) + '\n'
   plt.errorbar(x=bp_t, y=bp_val, yerr=bp_err, fmt='b-o', capsize=3)
   plt.errorbar(x=rp_t, y=rp_val, yerr=rp_err, fmt='r-o', capsize=3)
+  plt.figtext(.9, .9, "bp ratio: " +str(bp_rat))
   plt.savefig(fig_dir, dpi = 400)
   plt.close(fig)
 

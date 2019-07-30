@@ -52,16 +52,11 @@ print('\U0001f44d')
 
 # input cutoffs
 print('\nEnter cutoffs\n')
-slope = .001
-#float(input('bp/rp slope cutoff: '))
-r_s_min = .7
-#float(input('mininum r squared value: '))
-flux_min = 1.8
-#float(input('minimum flux ratio: '))
-flux_max = 2.2
-#float(input('maximum flux ratio: '))
-min_count = 5
-#float(input('minumum number of events: '))
+slope = float(input('bp/rp slope cutoff: '))
+r_s_min = float(input('mininum r squared value: '))
+flux_min = float(input('minimum flux ratio: '))
+flux_max = float(input('maximum flux ratio: '))
+min_count = float(input('minumum number of events: '))
 
 num_files = 0
 
@@ -159,8 +154,8 @@ with open(newFileName, 'w') as achrom_result:
                                         break
                                 
                                 if (max(bp_val) > flux_min*min(bp_val)) and (max(bp_val) < flux_max*min(bp_val)) \
-                                    and (max(rp_val) > flux_min*min(rp_val)) and (max(rp_val) < flux_max*min(rp_val)) \
-                                        and (abs((max(rp_val)/max(bp_val))-(min(rp_val)/min(bp_val))) <= .1):
+                                    and (max(rp_val) > flux_min*min(rp_val)) and (max(rp_val) < flux_max*min(rp_val)):
+
 
                                     # get next line while line is not of source_id
                                     while line2[0] != line[0]:
@@ -186,6 +181,14 @@ with open(newFileName, 'w') as achrom_result:
                                                 ((y[event] - y_err[event]) < val)
 
                                     if (count >= min_count) and in_range:
+
+                                        #create info:
+                                        info = 'bp ratio: ' + str(line[4]) + ' ' + \
+                                            'rp ratio: ' + str(line[5]) + '\n' + \
+                                                'r^2: ' + str(line[3]) + ' ' + \
+                                                    'slope: ' + str(line[1]) + '\n' + \
+                                                        'count: ' + str(count)
+
                                         val1 = x[0]*float(line[1]) + float(line[2])
                                         val2 = val
                                         # plot bp/rp
@@ -204,6 +207,10 @@ with open(newFileName, 'w') as achrom_result:
                                         plt.title(str(line[0]))
                                         plt.ylabel('flux')
                                         plt.xlabel('time')
+                                        plt.figtext(.7,.95, 'bp ratio: ' + str(line[4]))
+                                        plt.figtext(.05,.95, 'rp ratio: ' + str(line[5]))
+                                        plt.figtext(.7,.9, 'r^2: ' + str(line[3]))
+                                        plt.figtext(.05,.9, 'count: ' + str(count))
                                         plt.savefig(new_dir4+'/'+'time_series_'+str(line[0])+'.png', dpi = 300)
                                         plt.close(fig2)
                                         writer.writerow(line)
